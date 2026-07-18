@@ -229,9 +229,8 @@ function FilterPanel({
 }
 
 export function ListingsPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const showMeLocale = i18n.language !== "en";
 
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
