@@ -36,7 +36,7 @@ export function ForgotPasswordPage() {
     setSubmitError(null);
 
     const { error } = await supabase.auth.resetPasswordForEmail(result.data.email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: "https://prodajme.shop/reset-password",
     });
 
     if (error) {

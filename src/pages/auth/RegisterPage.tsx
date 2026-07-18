@@ -77,6 +77,7 @@ export function RegisterPage() {
       email: result.data.email,
       password: result.data.password,
       options: {
+        emailRedirectTo: "https://prodajme.shop",
         data: {
           username: result.data.username,
           phone: result.data.phone,
