@@ -57,19 +57,19 @@ export const listingSchema = z.object({
     .optional()
     .or(z.literal("")),
   price: z
-    .number({ error: "Cijena mora biti broj." })
+    .number({ invalid_type_error: "Cijena mora biti broj." })
     .positive("Cijena mora biti veća od 0.")
     .max(100_000, "Cijena je previsoka."),
   negotiable: z.boolean(),
-  category_id: z.number({ error: "Kategorija je obavezna." }),
-  gender: z.enum({ women: "women", men: "men", unisex: "unisex", kids: "kids" }, {
-    error: "Spol je obavezan.",
+  category_id: z.number({ invalid_type_error: "Kategorija je obavezna." }),
+  gender: z.enum(["women", "men", "unisex", "kids"] as const, {
+    errorMap: () => ({ message: "Spol je obavezan." }),
   }),
   size: z.string().min(1, "Veličina je obavezna.").max(20, "Veličina je predugačka."),
   brand: z.string().max(60, "Brand je predugačak.").optional().or(z.literal("")),
   color: z.string().max(50, "Boja je predugačka.").optional().or(z.literal("")),
-  condition: z.enum({ new_with_tags: "new_with_tags", like_new: "like_new", very_good: "very_good", good: "good", fair: "fair" }, {
-    error: "Stanje je obavezno.",
+  condition: z.enum(["new_with_tags", "like_new", "very_good", "good", "fair"] as const, {
+    errorMap: () => ({ message: "Stanje je obavezno." }),
   }),
   city: z.string().min(2, "Grad je obavezan.").max(100, "Naziv grada je predugačak."),
 });
