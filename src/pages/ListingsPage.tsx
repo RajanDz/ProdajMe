@@ -16,8 +16,217 @@ import { ListingGrid } from "../components/listings/ListingGrid";
 import { Layout } from "../components/layout/Layout";
 import { supabase } from "../lib/supabase";
 import { CATEGORIES } from "../constants/categories";
-import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, LISTINGS_PER_PAGE } from "../constants/listing";
+import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, BRANDS, COLORS, LISTINGS_PER_PAGE } from "../constants/listing";
 import type { Listing } from "../types";
+
+interface FilterPanelProps {
+  localQ: string; setLocalQ: (v: string) => void;
+  localCategory: string; setLocalCategory: (v: string) => void;
+  localGender: string; setLocalGender: (v: string) => void;
+  localSize: string; setLocalSize: (v: string) => void;
+  localCondition: string; setLocalCondition: (v: string) => void;
+  localCity: string; setLocalCity: (v: string) => void;
+  localBrand: string; setLocalBrand: (v: string) => void;
+  localColor: string; setLocalColor: (v: string) => void;
+  localMinPrice: string; setLocalMinPrice: (v: string) => void;
+  localMaxPrice: string; setLocalMaxPrice: (v: string) => void;
+  localSort: string; setLocalSort: (v: string) => void;
+  applyFilters: () => void;
+  clearFilters: () => void;
+  hasActiveFilters: boolean;
+}
+
+function FilterPanel({
+  localQ, setLocalQ,
+  localCategory, setLocalCategory,
+  localGender, setLocalGender,
+  localSize, setLocalSize,
+  localCondition, setLocalCondition,
+  localCity, setLocalCity,
+  localBrand, setLocalBrand,
+  localColor, setLocalColor,
+  localMinPrice, setLocalMinPrice,
+  localMaxPrice, setLocalMaxPrice,
+  localSort, setLocalSort,
+  applyFilters, clearFilters, hasActiveFilters,
+}: FilterPanelProps) {
+  const { t, i18n } = useTranslation();
+  const showMeLocale = i18n.language !== "en";
+  return (
+    <div className="space-y-4">
+      <div>
+        <Label className="mb-1.5 block">{t("filters.search")}</Label>
+        <Input
+          placeholder={t("filters.search")}
+          value={localQ}
+          onChange={(e) => setLocalQ(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && applyFilters()}
+        />
+      </div>
+
+      <div>
+        <Label className="mb-1.5 block">{t("listing.category")}</Label>
+        <Select value={localCategory || "all"} onValueChange={(v) => setLocalCategory(v === "all" ? "" : v)}>
+          <SelectTrigger>
+            <SelectValue placeholder={t("filters.all_categories")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.all_categories")}</SelectItem>
+            {CATEGORIES.map((cat) => (
+              <SelectItem key={cat.slug} value={cat.slug}>
+                {showMeLocale ? cat.name_me : cat.name_en}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label className="mb-1.5 block">{t("listing.gender")}</Label>
+        <Select value={localGender || "all"} onValueChange={(v) => setLocalGender(v === "all" ? "" : v)}>
+          <SelectTrigger>
+            <SelectValue placeholder={t("filters.all_genders")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.all_genders")}</SelectItem>
+            {GENDERS.map((g) => (
+              <SelectItem key={g.value} value={g.value}>
+                {showMeLocale ? g.label_me : g.label_en}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label className="mb-1.5 block">{t("listing.size")}</Label>
+        <Select value={localSize || "all"} onValueChange={(v) => setLocalSize(v === "all" ? "" : v)}>
+          <SelectTrigger>
+            <SelectValue placeholder={t("filters.all_sizes")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.all_sizes")}</SelectItem>
+            {SIZES.map((s) => (
+              <SelectItem key={s} value={s}>{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label className="mb-1.5 block">{t("listing.condition")}</Label>
+        <Select value={localCondition || "all"} onValueChange={(v) => setLocalCondition(v === "all" ? "" : v)}>
+          <SelectTrigger>
+            <SelectValue placeholder={t("filters.all_conditions")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.all_conditions")}</SelectItem>
+            {CONDITIONS.map((c) => (
+              <SelectItem key={c.value} value={c.value}>
+                {showMeLocale ? c.label_me : c.label_en}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label className="mb-1.5 block">{t("listing.city")}</Label>
+        <Select value={localCity || "all"} onValueChange={(v) => setLocalCity(v === "all" ? "" : v)}>
+          <SelectTrigger>
+            <SelectValue placeholder={t("filters.all_cities")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.all_cities")}</SelectItem>
+            {MONTENEGRIN_CITIES.map((city) => (
+              <SelectItem key={city} value={city}>{city}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label className="mb-1.5 block">{t("listing.brand")}</Label>
+        <Select value={localBrand || "all"} onValueChange={(v) => setLocalBrand(v === "all" ? "" : v)}>
+          <SelectTrigger>
+            <SelectValue placeholder={t("filters.all_brands")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.all_brands")}</SelectItem>
+            {BRANDS.map((b) => (
+              <SelectItem key={b} value={b}>{b}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label className="mb-1.5 block">{t("listing.color")}</Label>
+        <Select value={localColor || "all"} onValueChange={(v) => setLocalColor(v === "all" ? "" : v)}>
+          <SelectTrigger>
+            <SelectValue placeholder={t("filters.all_colors")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.all_colors")}</SelectItem>
+            {COLORS.map((c) => (
+              <SelectItem key={c.value} value={c.label_me}>
+                {showMeLocale ? c.label_me : c.label_en}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <Label className="mb-1.5 block">{t("filters.price_from")}</Label>
+          <Input
+            type="number"
+            min={0}
+            placeholder="0"
+            value={localMinPrice}
+            onChange={(e) => setLocalMinPrice(e.target.value)}
+          />
+        </div>
+        <div>
+          <Label className="mb-1.5 block">{t("filters.price_to")}</Label>
+          <Input
+            type="number"
+            min={0}
+            placeholder="—"
+            value={localMaxPrice}
+            onChange={(e) => setLocalMaxPrice(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label className="mb-1.5 block">{t("filters.sort")}</Label>
+        <Select value={localSort} onValueChange={setLocalSort}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">{t("filters.sort_newest")}</SelectItem>
+            <SelectItem value="price_asc">{t("filters.sort_price_asc")}</SelectItem>
+            <SelectItem value="price_desc">{t("filters.sort_price_desc")}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex gap-2 pt-2">
+        <Button onClick={applyFilters} className="flex-1">
+          {t("filters.apply")}
+        </Button>
+        {hasActiveFilters && (
+          <Button variant="outline" onClick={clearFilters} className="shrink-0" aria-label={t("filters.clear")}>
+            <X className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export function ListingsPage() {
   const { t, i18n } = useTranslation();
@@ -179,170 +388,20 @@ export function ListingsPage() {
     (searchParams.get("sort") && searchParams.get("sort") !== "newest")
   );
 
-  const FilterPanel = () => (
-    <div className="space-y-4">
-      <div>
-        <Label className="mb-1.5 block">{t("filters.search")}</Label>
-        <Input
-          placeholder={t("filters.search")}
-          value={localQ}
-          onChange={(e) => setLocalQ(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && applyFilters()}
-        />
-      </div>
-
-      <div>
-        <Label className="mb-1.5 block">{t("listing.category")}</Label>
-        <Select value={localCategory || "all"} onValueChange={(v) => setLocalCategory(v === "all" ? "" : v)}>
-          <SelectTrigger>
-            <SelectValue placeholder={t("filters.all_categories")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.all_categories")}</SelectItem>
-            {CATEGORIES.map((cat) => (
-              <SelectItem key={cat.slug} value={cat.slug}>
-                {showMeLocale ? cat.name_me : cat.name_en}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <Label className="mb-1.5 block">{t("listing.gender")}</Label>
-        <Select value={localGender || "all"} onValueChange={(v) => setLocalGender(v === "all" ? "" : v)}>
-          <SelectTrigger>
-            <SelectValue placeholder={t("filters.all_genders")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.all_genders")}</SelectItem>
-            {GENDERS.map((g) => (
-              <SelectItem key={g.value} value={g.value}>
-                {showMeLocale ? g.label_me : g.label_en}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <Label className="mb-1.5 block">{t("listing.size")}</Label>
-        <Select value={localSize || "all"} onValueChange={(v) => setLocalSize(v === "all" ? "" : v)}>
-          <SelectTrigger>
-            <SelectValue placeholder={t("filters.all_sizes")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.all_sizes")}</SelectItem>
-            {SIZES.map((s) => (
-              <SelectItem key={s} value={s}>{s}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <Label className="mb-1.5 block">{t("listing.condition")}</Label>
-        <Select value={localCondition || "all"} onValueChange={(v) => setLocalCondition(v === "all" ? "" : v)}>
-          <SelectTrigger>
-            <SelectValue placeholder={t("filters.all_conditions")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.all_conditions")}</SelectItem>
-            {CONDITIONS.map((c) => (
-              <SelectItem key={c.value} value={c.value}>
-                {showMeLocale ? c.label_me : c.label_en}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <Label className="mb-1.5 block">{t("listing.city")}</Label>
-        <Select value={localCity || "all"} onValueChange={(v) => setLocalCity(v === "all" ? "" : v)}>
-          <SelectTrigger>
-            <SelectValue placeholder={t("filters.all_cities")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.all_cities")}</SelectItem>
-            {MONTENEGRIN_CITIES.map((city) => (
-              <SelectItem key={city} value={city}>{city}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <Label className="mb-1.5 block">{t("listing.brand")}</Label>
-        <Input
-          placeholder={t("filters.brand_placeholder")}
-          value={localBrand}
-          onChange={(e) => setLocalBrand(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && applyFilters()}
-          maxLength={60}
-        />
-      </div>
-
-      <div>
-        <Label className="mb-1.5 block">{t("listing.color")}</Label>
-        <Input
-          placeholder={t("filters.color_placeholder")}
-          value={localColor}
-          onChange={(e) => setLocalColor(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && applyFilters()}
-          maxLength={50}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-2">
-        <div>
-          <Label className="mb-1.5 block">{t("filters.price_from")}</Label>
-          <Input
-            type="number"
-            min={0}
-            placeholder="0"
-            value={localMinPrice}
-            onChange={(e) => setLocalMinPrice(e.target.value)}
-          />
-        </div>
-        <div>
-          <Label className="mb-1.5 block">{t("filters.price_to")}</Label>
-          <Input
-            type="number"
-            min={0}
-            placeholder="—"
-            value={localMaxPrice}
-            onChange={(e) => setLocalMaxPrice(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div>
-        <Label className="mb-1.5 block">{t("filters.sort")}</Label>
-        <Select value={localSort} onValueChange={setLocalSort}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="newest">{t("filters.sort_newest")}</SelectItem>
-            <SelectItem value="price_asc">{t("filters.sort_price_asc")}</SelectItem>
-            <SelectItem value="price_desc">{t("filters.sort_price_desc")}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="flex gap-2 pt-2">
-        <Button onClick={applyFilters} className="flex-1">
-          {t("filters.apply")}
-        </Button>
-        {hasActiveFilters && (
-          <Button variant="outline" onClick={clearFilters} className="shrink-0" aria-label={t("filters.clear")}>
-            <X className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
-    </div>
-  );
+  const filterPanelProps: FilterPanelProps = {
+    localQ, setLocalQ,
+    localCategory, setLocalCategory,
+    localGender, setLocalGender,
+    localSize, setLocalSize,
+    localCondition, setLocalCondition,
+    localCity, setLocalCity,
+    localBrand, setLocalBrand,
+    localColor, setLocalColor,
+    localMinPrice, setLocalMinPrice,
+    localMaxPrice, setLocalMaxPrice,
+    localSort, setLocalSort,
+    applyFilters, clearFilters, hasActiveFilters,
+  };
 
   return (
     <Layout>
@@ -371,7 +430,7 @@ export function ListingsPage() {
         {/* Mobile filter drawer */}
         {filterOpen && (
           <div id="filter-panel" className="mb-6 rounded-2xl border border-border bg-white p-4 lg:hidden">
-            <FilterPanel />
+            <FilterPanel {...filterPanelProps} />
           </div>
         )}
 
@@ -380,7 +439,7 @@ export function ListingsPage() {
           <aside className="hidden lg:block w-64 shrink-0" aria-label={t("filters.filters")}>
             <div className="sticky top-20 rounded-2xl border border-border bg-white p-4">
               <h2 className="font-semibold text-base mb-4">{t("filters.filters")}</h2>
-              <FilterPanel />
+              <FilterPanel {...filterPanelProps} />
             </div>
           </aside>
 

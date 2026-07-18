@@ -89,6 +89,8 @@
     "all_conditions": "All Conditions",
     "all_cities": "All Cities",
     "all_sizes": "All Sizes",
+    "all_brands": "All Brands",
+    "all_colors": "All Colors",
     "brand_placeholder": "e.g. Nike, Zara...",
     "color_placeholder": "e.g. black, white...",
     "results": "listings",

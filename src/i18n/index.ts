@@ -16,7 +16,7 @@ i18n
     fallbackLng: "me",
     supportedLngs: ["me", "en"],
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["localStorage"],
       caches: ["localStorage"],
       lookupLocalStorage: "prodajme_lang",
     },

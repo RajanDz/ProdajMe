@@ -50,6 +50,34 @@ export const MONTENEGRIN_CITIES = [
   "Danilovgrad",
 ];
 
+export const BRANDS = [
+  "Adidas", "Nike", "Puma", "New Balance", "Converse", "Vans", "Under Armour",
+  "Zara", "H&M", "Mango", "Pull&Bear", "Bershka", "Stradivarius", "Reserved",
+  "Massimo Dutti", "Levi's", "Pepe Jeans", "Diesel", "Tommy Hilfiger",
+  "Calvin Klein", "Guess", "Lacoste", "Ralph Lauren", "Hugo Boss",
+  "Armani", "Versace", "Michael Kors", "Liu Jo", "Pinko",
+  "Ostalo",
+];
+
+export const COLORS: { value: string; label_me: string; label_en: string }[] = [
+  { value: "bijela", label_me: "Bijela", label_en: "White" },
+  { value: "crna", label_me: "Crna", label_en: "Black" },
+  { value: "siva", label_me: "Siva", label_en: "Grey" },
+  { value: "bez", label_me: "Bež", label_en: "Beige" },
+  { value: "smedja", label_me: "Smeđa", label_en: "Brown" },
+  { value: "crvena", label_me: "Crvena", label_en: "Red" },
+  { value: "narandzasta", label_me: "Narandžasta", label_en: "Orange" },
+  { value: "zuta", label_me: "Žuta", label_en: "Yellow" },
+  { value: "zelena", label_me: "Zelena", label_en: "Green" },
+  { value: "plava", label_me: "Plava", label_en: "Blue" },
+  { value: "tamnoplava", label_me: "Tamnoplava", label_en: "Navy" },
+  { value: "ljubicasta", label_me: "Ljubičasta", label_en: "Purple" },
+  { value: "roze", label_me: "Roze", label_en: "Pink" },
+  { value: "zlatna", label_me: "Zlatna", label_en: "Gold" },
+  { value: "srebrna", label_me: "Srebrna", label_en: "Silver" },
+  { value: "visebojno", label_me: "Višebojno", label_en: "Multicolor" },
+];
+
 export const MAX_LISTING_IMAGES = 10;
 export const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 export const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
