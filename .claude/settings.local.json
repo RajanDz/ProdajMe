@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node -e \"const z = require\\('zod'\\); console.log\\(z.ZodError ? 'v3-style' : 'unknown'\\); const s = z.string\\(\\).safeParse\\('test'\\); console.log\\(s\\);\")",
+      "Bash(npx tsc *)",
+      "Bash(npx react-scripts *)",
+      "Bash(node_modules/.bin/tsc --version)",
+      "Bash(node_modules/.bin/tsc *)",
+      "Bash(node *)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(npm start *)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(BROWSER=none npm start)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3000)",
+      "Bash(taskkill *)",
+      "PowerShell(Stop-Process *)",
+      "PowerShell(Get-NetTCPConnection *)"
+    ]
+  }
+}
