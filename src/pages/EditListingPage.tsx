@@ -19,7 +19,7 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { listingSchema, validateImageFile, validateImageFiles, validateImageMagicBytes } from "../lib/validation";
 import { CATEGORIES } from "../constants/categories";
-import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, MAX_LISTING_IMAGES } from "../constants/listing";
+import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, BRANDS, COLORS, MAX_LISTING_IMAGES } from "../constants/listing";
 import { getImageUrl } from "../lib/utils";
 import type { ListingInput } from "../lib/validation";
 import type { Listing, ListingImage } from "../types";
@@ -468,28 +468,44 @@ export function EditListingPage() {
           {/* Brand + Color */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="brand" className="mb-1.5 block">
+              <Label className="mb-1.5 block">
                 {t("listing.brand")}{" "}
                 <span className="text-muted-foreground font-normal">({t("common.optional")})</span>
               </Label>
-              <Input
-                id="brand"
-                value={form.brand ?? ""}
-                onChange={(e) => handleField("brand", e.target.value)}
-                maxLength={60}
-              />
+              <Select
+                value={form.brand || "none"}
+                onValueChange={(v) => handleField("brand", v === "none" ? "" : v)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t("listing.brand")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">{t("common.optional")}</SelectItem>
+                  {BRANDS.map((b) => (
+                    <SelectItem key={b} value={b}>{b}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
-              <Label htmlFor="color" className="mb-1.5 block">
+              <Label className="mb-1.5 block">
                 {t("listing.color")}{" "}
                 <span className="text-muted-foreground font-normal">({t("common.optional")})</span>
               </Label>
-              <Input
-                id="color"
-                value={form.color ?? ""}
-                onChange={(e) => handleField("color", e.target.value)}
-                maxLength={50}
-              />
+              <Select
+                value={form.color || "none"}
+                onValueChange={(v) => handleField("color", v === "none" ? "" : v)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t("listing.color")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">{t("common.optional")}</SelectItem>
+                  {COLORS.map((c) => (
+                    <SelectItem key={c.value} value={c.label_me}>{c.label_me}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
