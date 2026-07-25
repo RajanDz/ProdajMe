@@ -247,8 +247,8 @@ export function EditListingPage() {
           negotiable: result.data.negotiable,
           gender: result.data.gender,
           size: result.data.size,
-          brand: result.data.brand || null,
-          color: result.data.color || null,
+          brand: result.data.brand,
+          color: result.data.color,
           condition: result.data.condition,
           city: result.data.city,
         })
@@ -470,35 +470,38 @@ export function EditListingPage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label className="mb-1.5 block">
-                {t("listing.brand")}{" "}
-                <span className="text-muted-foreground font-normal">({t("common.optional")})</span>
+                {t("listing.brand")} <span className="text-destructive" aria-hidden="true">*</span>
               </Label>
               <BrandCombobox
                 value={form.brand || ""}
                 onChange={(v) => handleField("brand", v)}
                 placeholder={t("listing.brand")}
-                emptyLabel={t("common.optional")}
+                showEmptyOption={false}
               />
+              {fieldErrors.brand && (
+                <p className="text-xs text-destructive mt-1">{fieldErrors.brand}</p>
+              )}
             </div>
             <div>
               <Label className="mb-1.5 block">
-                {t("listing.color")}{" "}
-                <span className="text-muted-foreground font-normal">({t("common.optional")})</span>
+                {t("listing.color")} <span className="text-destructive" aria-hidden="true">*</span>
               </Label>
               <Select
-                value={form.color || "none"}
-                onValueChange={(v) => handleField("color", v === "none" ? "" : v)}
+                value={form.color}
+                onValueChange={(v) => handleField("color", v)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder={t("listing.color")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">{t("common.optional")}</SelectItem>
                   {COLORS.map((c) => (
-                    <SelectItem key={c.value} value={c.label_me}>{c.label_me}</SelectItem>
+                    <SelectItem key={c.value} value={c.label_me}>{showMeLocale ? c.label_me : c.label_en}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              {fieldErrors.color && (
+                <p className="text-xs text-destructive mt-1">{fieldErrors.color}</p>
+              )}
             </div>
           </div>
 

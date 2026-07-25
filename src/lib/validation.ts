@@ -66,8 +66,8 @@ export const listingSchema = z.object({
     errorMap: () => ({ message: "Spol je obavezan." }),
   }),
   size: z.string().min(1, "Veličina je obavezna.").max(20, "Veličina je predugačka."),
-  brand: z.string().max(60, "Brand je predugačak.").optional().or(z.literal("")),
-  color: z.string().max(50, "Boja je predugačka.").optional().or(z.literal("")),
+  brand: z.string().min(1, "Brand je obavezan.").max(60, "Brand je predugačak."),
+  color: z.string().min(1, "Boja je obavezna.").max(50, "Boja je predugačka."),
   condition: z.enum(["new_with_tags", "like_new", "very_good", "good", "fair"] as const, {
     errorMap: () => ({ message: "Stanje je obavezno." }),
   }),

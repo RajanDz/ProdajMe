@@ -8,7 +8,10 @@ interface BrandComboboxProps {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
-  emptyLabel: string;
+  /** Label and value for the first "clear" option (value = ""). Omit when showEmptyOption={false}. */
+  emptyLabel?: string;
+  /** Set false to hide the empty/clear option (use for required fields). Default: true. */
+  showEmptyOption?: boolean;
   className?: string;
 }
 
@@ -17,6 +20,7 @@ export function BrandCombobox({
   onChange,
   placeholder,
   emptyLabel,
+  showEmptyOption = true,
   className,
 }: BrandComboboxProps) {
   const { t } = useTranslation();
@@ -36,14 +40,13 @@ export function BrandCombobox({
     return q ? BRANDS.filter((b) => b.toLowerCase().includes(q)) : BRANDS;
   }, [search]);
 
-  // Selectable items: empty option first, then filtered brands
-  const items = useMemo(
-    () => [
-      { label: emptyLabel, value: "" },
-      ...filteredBrands.map((b) => ({ label: b, value: b })),
-    ],
-    [filteredBrands, emptyLabel]
-  );
+  const items = useMemo(() => {
+    const brandItems = filteredBrands.map((b) => ({ label: b, value: b }));
+    if (showEmptyOption && emptyLabel) {
+      return [{ label: emptyLabel, value: "" }, ...brandItems];
+    }
+    return brandItems;
+  }, [filteredBrands, emptyLabel, showEmptyOption]);
 
   const closeDropdown = () => {
     setOpen(false);
@@ -58,9 +61,10 @@ export function BrandCombobox({
 
   const openDropdown = () => {
     setSearch("");
-    // Pre-highlight the currently selected value's position in the full list
-    const fullItems = [{ value: "" }, ...BRANDS.map((b) => ({ value: b }))];
-    const idx = fullItems.findIndex((item) => item.value === value);
+    const fullList = showEmptyOption && emptyLabel
+      ? [{ value: "" }, ...BRANDS.map((b) => ({ value: b }))]
+      : BRANDS.map((b) => ({ value: b }));
+    const idx = fullList.findIndex((item) => item.value === value);
     setHighlighted(idx >= 0 ? idx : 0);
     setOpen(true);
     requestAnimationFrame(() => inputRef.current?.focus());
@@ -168,7 +172,6 @@ export function BrandCombobox({
                 key={item.value === "" ? "__empty__" : item.value}
                 role="option"
                 aria-selected={item.value === value}
-                // onMouseDown + preventDefault keeps focus in the input during selection
                 onMouseDown={(e) => {
                   e.preventDefault();
                   selectItem(item.value);

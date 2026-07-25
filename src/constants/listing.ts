@@ -51,6 +51,7 @@ export const MONTENEGRIN_CITIES = [
 ];
 
 export const BRANDS = [
+  "Bez brenda",
   "Nike",
   "Adidas",
   "Puma",
@@ -149,6 +150,7 @@ export const COLORS: { value: string; label_me: string; label_en: string }[] = [
   { value: "zlatna", label_me: "Zlatna", label_en: "Gold" },
   { value: "srebrna", label_me: "Srebrna", label_en: "Silver" },
   { value: "visebojno", label_me: "Višebojno", label_en: "Multicolor" },
+  { value: "ostalo", label_me: "Ostalo", label_en: "Other" },
 ];
 
 export const MAX_LISTING_IMAGES = 10;
