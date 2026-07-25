@@ -9,6 +9,7 @@ import { Layout } from "../components/layout/Layout";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { CATEGORIES } from "../constants/categories";
+import { POPULAR_BRANDS } from "../constants/listing";
 import type { Listing } from "../types";
 
 export function HomePage() {
@@ -112,6 +113,32 @@ export function HomePage() {
                 {showMeLocale ? cat.name_me : cat.name_en}
               </button>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Brands */}
+      <section className="pt-4 pb-2 px-4">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            {t("home.popular_brands")}
+          </h2>
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide sm:flex-wrap">
+            {POPULAR_BRANDS.map((brand) => (
+              <button
+                key={brand}
+                onClick={() => navigate(`/listings?brand=${encodeURIComponent(brand)}`)}
+                className="shrink-0 rounded-full border border-border bg-white px-4 py-1.5 text-sm font-medium text-foreground hover:bg-primary hover:text-white hover:border-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                {brand}
+              </button>
+            ))}
+            <button
+              onClick={() => navigate("/listings")}
+              className="shrink-0 rounded-full border border-primary/40 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-white hover:border-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {t("home.view_all_brands")}
+            </button>
           </div>
         </div>
       </section>

@@ -153,6 +153,11 @@ export const COLORS: { value: string; label_me: string; label_en: string }[] = [
   { value: "ostalo", label_me: "Ostalo", label_en: "Other" },
 ];
 
+export const POPULAR_BRANDS = [
+  "Nike", "Adidas", "Zara", "H&M", "Bershka", "New Yorker",
+  "Pull&Bear", "Jordan", "Tommy Hilfiger", "Guess", "Calvin Klein", "Levi's",
+].filter((b) => BRANDS.includes(b));
+
 export const MAX_LISTING_IMAGES = 10;
 export const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 export const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
