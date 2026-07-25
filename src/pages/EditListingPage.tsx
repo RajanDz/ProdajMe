@@ -19,7 +19,8 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { listingSchema, validateImageFile, validateImageFiles, validateImageMagicBytes } from "../lib/validation";
 import { CATEGORIES } from "../constants/categories";
-import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, BRANDS, COLORS, MAX_LISTING_IMAGES } from "../constants/listing";
+import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, COLORS, MAX_LISTING_IMAGES } from "../constants/listing";
+import { BrandCombobox } from "../components/ui/brand-combobox";
 import { getImageUrl } from "../lib/utils";
 import type { ListingInput } from "../lib/validation";
 import type { Listing, ListingImage } from "../types";
@@ -472,20 +473,12 @@ export function EditListingPage() {
                 {t("listing.brand")}{" "}
                 <span className="text-muted-foreground font-normal">({t("common.optional")})</span>
               </Label>
-              <Select
-                value={form.brand || "none"}
-                onValueChange={(v) => handleField("brand", v === "none" ? "" : v)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={t("listing.brand")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">{t("common.optional")}</SelectItem>
-                  {BRANDS.map((b) => (
-                    <SelectItem key={b} value={b}>{b}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <BrandCombobox
+                value={form.brand || ""}
+                onChange={(v) => handleField("brand", v)}
+                placeholder={t("listing.brand")}
+                emptyLabel={t("common.optional")}
+              />
             </div>
             <div>
               <Label className="mb-1.5 block">

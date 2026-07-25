@@ -93,6 +93,7 @@
     "all_brands": "All Brands",
     "all_colors": "All Colors",
     "brand_placeholder": "e.g. Nike, Zara...",
+    "no_brands_found": "No brands found",
     "color_placeholder": "e.g. black, white...",
     "results": "listings",
     "prev_page": "Previous",

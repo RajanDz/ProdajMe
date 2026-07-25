@@ -16,7 +16,8 @@ import { ListingGrid } from "../components/listings/ListingGrid";
 import { Layout } from "../components/layout/Layout";
 import { supabase } from "../lib/supabase";
 import { CATEGORIES } from "../constants/categories";
-import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, BRANDS, COLORS, LISTINGS_PER_PAGE } from "../constants/listing";
+import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, COLORS, LISTINGS_PER_PAGE } from "../constants/listing";
+import { BrandCombobox } from "../components/ui/brand-combobox";
 import type { Listing } from "../types";
 
 interface FilterPanelProps {
@@ -147,17 +148,12 @@ function FilterPanel({
 
       <div>
         <Label className="mb-1.5 block">{t("listing.brand")}</Label>
-        <Select value={localBrand || "all"} onValueChange={(v) => setLocalBrand(v === "all" ? "" : v)}>
-          <SelectTrigger>
-            <SelectValue placeholder={t("filters.all_brands")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.all_brands")}</SelectItem>
-            {BRANDS.map((b) => (
-              <SelectItem key={b} value={b}>{b}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <BrandCombobox
+          value={localBrand}
+          onChange={(v) => setLocalBrand(v)}
+          placeholder={t("filters.all_brands")}
+          emptyLabel={t("filters.all_brands")}
+        />
       </div>
 
       <div>
