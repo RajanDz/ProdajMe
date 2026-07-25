@@ -245,13 +245,13 @@ export function ListingPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image gallery */}
           <div>
-            <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-muted">
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-muted">
               {mainImageUrl ? (
                 <img
                   src={mainImageUrl}
                   alt={listing.title}
                   loading="lazy"
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain"
                 />
               ) : (
                 <div className="h-full w-full flex items-center justify-center text-muted-foreground">
