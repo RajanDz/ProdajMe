@@ -206,7 +206,9 @@ export function CreateListingPage() {
         <form onSubmit={handleSubmit} noValidate className="space-y-5">
           {/* Title */}
           <div>
-            <Label htmlFor="title" className="mb-1.5 block">{t("listing.title")}</Label>
+            <Label htmlFor="title" className="mb-1.5 block">
+              {t("listing.title")} <span className="text-destructive" aria-hidden="true">*</span>
+            </Label>
             <Input
               id="title"
               value={form.title}
@@ -239,7 +241,9 @@ export function CreateListingPage() {
           {/* Price + Negotiable */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="price" className="mb-1.5 block">{t("listing.price")}</Label>
+              <Label htmlFor="price" className="mb-1.5 block">
+                {t("listing.price")} <span className="text-destructive" aria-hidden="true">*</span>
+              </Label>
               <Input
                 id="price"
                 type="number"
@@ -267,7 +271,9 @@ export function CreateListingPage() {
 
           {/* Category */}
           <div>
-            <Label className="mb-1.5 block">{t("listing.category")}</Label>
+            <Label className="mb-1.5 block">
+              {t("listing.category")} <span className="text-destructive" aria-hidden="true">*</span>
+            </Label>
             <Select
               value={form.category_id ? String(form.category_id) : ""}
               onValueChange={(v) => handleField("category_id", parseInt(v, 10))}
@@ -291,7 +297,9 @@ export function CreateListingPage() {
           {/* Gender + Size */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label className="mb-1.5 block">{t("listing.gender")}</Label>
+              <Label className="mb-1.5 block">
+                {t("listing.gender")} <span className="text-destructive" aria-hidden="true">*</span>
+              </Label>
               <Select
                 value={form.gender}
                 onValueChange={(v) =>
@@ -314,7 +322,9 @@ export function CreateListingPage() {
               )}
             </div>
             <div>
-              <Label className="mb-1.5 block">{t("listing.size")}</Label>
+              <Label className="mb-1.5 block">
+                {t("listing.size")} <span className="text-destructive" aria-hidden="true">*</span>
+              </Label>
               <Select
                 value={form.size}
                 onValueChange={(v) => handleField("size", v)}
@@ -377,7 +387,9 @@ export function CreateListingPage() {
 
           {/* Condition */}
           <div>
-            <Label className="mb-1.5 block">{t("listing.condition")}</Label>
+            <Label className="mb-1.5 block">
+              {t("listing.condition")} <span className="text-destructive" aria-hidden="true">*</span>
+            </Label>
             <Select
               value={form.condition}
               onValueChange={(v) =>
@@ -402,7 +414,9 @@ export function CreateListingPage() {
 
           {/* City */}
           <div>
-            <Label className="mb-1.5 block">{t("listing.city")}</Label>
+            <Label className="mb-1.5 block">
+              {t("listing.city")} <span className="text-destructive" aria-hidden="true">*</span>
+            </Label>
             <Select value={form.city} onValueChange={(v) => handleField("city", v)}>
               <SelectTrigger>
                 <SelectValue placeholder={t("filters.all_cities")} />
@@ -423,10 +437,8 @@ export function CreateListingPage() {
           {/* Image upload */}
           <div>
             <Label className="mb-1.5 block">
-              {t("listing.photos")}{" "}
-              <span className="text-muted-foreground font-normal">
-                (max {MAX_LISTING_IMAGES})
-              </span>
+              {t("listing.photos")} <span className="text-destructive" aria-hidden="true">*</span>{" "}
+              <span className="text-muted-foreground font-normal">(max {MAX_LISTING_IMAGES})</span>
             </Label>
 
             <div
