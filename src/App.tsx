@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/common/ProtectedRoute";
+import { ScrollToTop } from "./components/common/ScrollToTop";
 
 import { HomePage } from "./pages/HomePage";
 import { ListingsPage } from "./pages/ListingsPage";
@@ -20,7 +21,9 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 
 function AppRoutes() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/listings" element={<ListingsPage />} />
       <Route path="/listings/new" element={
@@ -50,7 +53,8 @@ function AppRoutes() {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+      </Routes>
+    </>
   );
 }
 
