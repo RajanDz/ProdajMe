@@ -72,7 +72,9 @@ export function ListingPage() {
     setLoading(false);
 
     // Increment view count via SECURITY DEFINER function (bypasses owner-only UPDATE RLS)
-    supabase.rpc("increment_view_count", { listing_id: id }).then(() => {});
+    supabase.rpc("increment_view_count", { listing_id: id }).then(({ error }) => {
+      if (error) console.error("[view_count] rpc error:", error);
+    });
 
     // Fetch other listings from same seller
     if (fetchedListing.user_id) {
