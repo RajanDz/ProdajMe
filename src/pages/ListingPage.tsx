@@ -41,6 +41,7 @@ export function ListingPage() {
   const [reportSubmitted, setReportSubmitted] = useState(false);
   const [reportLoading, setReportLoading] = useState(false);
   const [otherListings, setOtherListings] = useState<Listing[]>([]);
+  const [relatedListings, setRelatedListings] = useState<Listing[]>([]);
 
   // Strip anything that isn't a valid tel: character to prevent href injection
   const safePhone = listing?.profiles?.phone
@@ -85,6 +86,46 @@ export function ListingPage() {
 
       if (others) {
         setOtherListings(others as unknown as Listing[]);
+      }
+    }
+
+    // Fetch related listings: same category (+ gender if present), newest first
+    if (fetchedListing.category_id) {
+      let query = supabase
+        .from("listings")
+        .select("*, listing_images(*), profiles(id,username,avatar_url,city,phone), categories(slug,name_me,name_en)")
+        .eq("category_id", fetchedListing.category_id)
+        .eq("status", "active")
+        .neq("id", id)
+        .order("created_at", { ascending: false })
+        .limit(8);
+
+      if (fetchedListing.gender) {
+        query = query.eq("gender", fetchedListing.gender);
+      }
+
+      const { data: related } = await query;
+      const relatedResults: Listing[] = related ? (related as unknown as Listing[]) : [];
+
+      // Fallback: if fewer than 4, fill up with newest active listings
+      if (relatedResults.length < 4) {
+        const excludeIds = [id, ...relatedResults.map((l) => l.id)];
+        const needed = 8 - relatedResults.length;
+        const { data: fallback } = await supabase
+          .from("listings")
+          .select("*, listing_images(*), profiles(id,username,avatar_url,city,phone), categories(slug,name_me,name_en)")
+          .eq("status", "active")
+          .not("id", "in", `(${excludeIds.join(",")})`)
+          .order("created_at", { ascending: false })
+          .limit(needed);
+
+        if (fallback) {
+          setRelatedListings([...relatedResults, ...(fallback as unknown as Listing[])]);
+        } else {
+          setRelatedListings(relatedResults);
+        }
+      } else {
+        setRelatedListings(relatedResults);
       }
     }
   }, [id, t]);
@@ -394,6 +435,18 @@ export function ListingPage() {
             <h2 className="text-lg font-bold mb-4">{t("listing.other_from_seller")}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {otherListings.map((l) => (
+                <ListingCard key={l.id} listing={l} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Related listings */}
+        {relatedListings.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-lg font-bold mb-4">{t("listing.related_listings")}</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {relatedListings.map((l) => (
                 <ListingCard key={l.id} listing={l} />
               ))}
             </div>
