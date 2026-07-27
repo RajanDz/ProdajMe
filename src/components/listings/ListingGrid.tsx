@@ -11,10 +11,12 @@ interface ListingGridProps {
 function SkeletonCard() {
   return (
     <div className="rounded-2xl overflow-hidden border border-border bg-white shadow-sm animate-pulse">
-      <div className="aspect-square w-full bg-muted" />
+      <div className="aspect-[4/5] w-full bg-muted" />
       <div className="p-3 space-y-2">
-        <div className="h-4 bg-muted rounded w-3/4" />
-        <div className="h-3 bg-muted rounded w-1/2" />
+        <div className="h-2.5 bg-muted rounded w-1/4" />
+        <div className="h-4 bg-muted rounded w-4/5" />
+        <div className="h-3.5 bg-muted rounded w-3/5" />
+        <div className="h-3 bg-muted rounded w-1/4" />
         <div className="h-5 bg-muted rounded w-1/3 mt-1" />
       </div>
     </div>
