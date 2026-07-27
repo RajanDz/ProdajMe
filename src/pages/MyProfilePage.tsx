@@ -188,7 +188,7 @@ export function MyProfilePage() {
                 ? [...listing.listing_images].sort((a, b) => a.position - b.position)[0]
                 : undefined;
               const thumbUrl = firstImage
-                ? getImageUrl(firstImage.storage_path, SUPABASE_URL)
+                ? getImageUrl(firstImage.storage_path, SUPABASE_URL, 128)
                 : undefined;
 
               return (
@@ -202,7 +202,10 @@ export function MyProfilePage() {
                       <img
                         src={thumbUrl}
                         alt={listing.title}
+                        width={128}
+                        height={128}
                         loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover"
                       />
                     ) : (

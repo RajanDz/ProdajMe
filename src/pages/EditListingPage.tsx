@@ -18,6 +18,7 @@ import { Layout } from "../components/layout/Layout";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { listingSchema, validateImageFile, validateImageFiles, validateImageMagicBytes } from "../lib/validation";
+import { processImageForUpload } from "../lib/imageProcessing";
 import { CATEGORIES } from "../constants/categories";
 import { GENDERS, CONDITIONS, SIZES, MONTENEGRIN_CITIES, COLORS, MAX_LISTING_IMAGES } from "../constants/listing";
 import { BrandCombobox } from "../components/ui/brand-combobox";
@@ -280,16 +281,31 @@ export function EditListingPage() {
           item.type === "existing" && !item.markedForDelete
       ).length;
 
-      const newItems = imageItems.filter(
+      const rawNewItems = imageItems.filter(
         (item): item is NewImagePreview => item.type === "new"
       );
+
+      // Resize to max 1200 px and convert to WebP before upload.
+      let newItems: NewImagePreview[];
+      try {
+        newItems = await Promise.all(
+          rawNewItems.map(async (item) => ({
+            ...item,
+            file: await processImageForUpload(item.file),
+          }))
+        );
+      } catch {
+        setSubmitError("Greška pri obradi fotografija. Pokušajte ponovo.");
+        setLoading(false);
+        return;
+      }
 
       const imageRows: { listing_id: string; storage_path: string; position: number }[] = [];
 
       for (let i = 0; i < newItems.length; i++) {
         const img = newItems[i];
-        const ext = img.file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-        const path = `${user.id}/${id}/${crypto.randomUUID()}.${ext}`;
+        // processImageForUpload always returns a .webp file
+        const path = `${user.id}/${id}/${crypto.randomUUID()}.webp`;
 
         const { error: uploadError } = await supabase.storage
           .from("listing-images")

@@ -250,7 +250,9 @@ export function ListingPage() {
                 <img
                   src={mainImageUrl}
                   alt={listing.title}
-                  loading="lazy"
+                  // LCP element — load eagerly and with high fetch priority
+                  fetchPriority="high"
+                  decoding="async"
                   className="h-full w-full object-contain"
                 />
               ) : (
@@ -282,9 +284,12 @@ export function ListingPage() {
                     }`}
                   >
                     <img
-                      src={getImageUrl(img.storage_path, SUPABASE_URL)}
+                      src={getImageUrl(img.storage_path, SUPABASE_URL, 128)}
                       alt=""
+                      width={128}
+                      height={128}
                       loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover"
                     />
                   </button>

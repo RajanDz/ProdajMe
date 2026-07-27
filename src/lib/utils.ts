@@ -42,11 +42,35 @@ export function sanitizeText(text: string): string {
     .replace(/'/g, "&#039;");
 }
 
-export function getImageUrl(storagePath: string, supabaseUrl: string): string {
+/**
+ * Returns a Supabase Storage URL for a listing image.
+ * When `width` is provided, switches to the /render/image/ endpoint which
+ * resizes the image server-side — preventing cards from downloading full-size
+ * files. Requires Supabase Pro / Image Transformations add-on to be enabled.
+ */
+export function getImageUrl(
+  storagePath: string,
+  supabaseUrl: string,
+  width?: number
+): string {
+  if (width) {
+    return `${supabaseUrl}/storage/v1/render/image/public/listing-images/${storagePath}?width=${width}&quality=75`;
+  }
   return `${supabaseUrl}/storage/v1/object/public/listing-images/${storagePath}`;
 }
 
-export function getAvatarUrl(storagePath: string, supabaseUrl: string): string {
+/**
+ * Returns a Supabase Storage URL for an avatar image.
+ * When `width` is provided, serves a resized variant via /render/image/.
+ */
+export function getAvatarUrl(
+  storagePath: string,
+  supabaseUrl: string,
+  width?: number
+): string {
+  if (width) {
+    return `${supabaseUrl}/storage/v1/render/image/public/avatars/${storagePath}?width=${width}&quality=75`;
+  }
   return `${supabaseUrl}/storage/v1/object/public/avatars/${storagePath}`;
 }
 

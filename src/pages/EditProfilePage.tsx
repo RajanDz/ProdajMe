@@ -17,6 +17,7 @@ import { Layout } from "../components/layout/Layout";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { profileSchema, validateImageFile, validateImageMagicBytes } from "../lib/validation";
+import { processImageForUpload } from "../lib/imageProcessing";
 import { MONTENEGRIN_CITIES } from "../constants/listing";
 import { getAvatarUrl } from "../lib/utils";
 import type { ProfileInput } from "../lib/validation";
@@ -120,14 +121,24 @@ export function EditProfilePage() {
 
       let avatarStoragePath: string | undefined;
 
-      // Upload avatar if changed
+      // Upload avatar if changed — resize to max 1200 px and convert to WebP first.
       if (avatarFile) {
-        const ext = avatarFile.name.split(".").pop()?.toLowerCase() ?? "jpg";
-        const path = `${user.id}/avatar.${ext}`;
+        let processedAvatar: File;
+        try {
+          processedAvatar = await processImageForUpload(avatarFile);
+        } catch {
+          setSubmitError(t("errors.generic"));
+          setLoading(false);
+          return;
+        }
+
+        // Avatar path is deterministic so upsert=true overwrites the previous one.
+        // processImageForUpload always produces .webp.
+        const path = `${user.id}/avatar.webp`;
 
         const { error: uploadError } = await supabase.storage
           .from("avatars")
-          .upload(path, avatarFile, { cacheControl: "3600", upsert: true });
+          .upload(path, processedAvatar, { cacheControl: "3600", upsert: true });
 
         if (uploadError) {
           setSubmitError(t("errors.generic"));
