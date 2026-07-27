@@ -54,7 +54,7 @@ export function getImageUrl(
   width?: number
 ): string {
   if (width) {
-    return `${supabaseUrl}/storage/v1/render/image/public/listing-images/${storagePath}?width=${width}&quality=75`;
+    return `${supabaseUrl}/storage/v1/render/image/public/listing-images/${storagePath}?width=${width}&quality=75&resize=contain`;
   }
   return `${supabaseUrl}/storage/v1/object/public/listing-images/${storagePath}`;
 }
