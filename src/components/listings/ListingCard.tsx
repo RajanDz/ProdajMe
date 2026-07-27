@@ -20,7 +20,7 @@ export function ListingCard({ listing }: ListingCardProps) {
     : undefined;
 
   const imageUrl = firstImage
-    ? getImageUrl(firstImage.storage_path, SUPABASE_URL)
+    ? getImageUrl(firstImage.storage_path, SUPABASE_URL, 600)
     : undefined;
 
   const conditionLabel = listing.condition
