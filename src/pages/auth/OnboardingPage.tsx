@@ -207,7 +207,7 @@ export function OnboardingPage() {
                   id="phone"
                   type="tel"
                   inputMode="numeric"
-                  placeholder="67 155 370"
+                  placeholder="XX XXX XXX"
                   className="flex-1 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground"
                   value={form.phone.replace(/^\+382\s?/, "")}
                   onChange={(e) => handleField("phone", "+382 " + e.target.value)}

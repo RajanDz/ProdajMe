@@ -52,7 +52,7 @@ export function RegisterPage() {
     email: "",
     password: "",
     username: "",
-    phone: "",
+    phone: "+382 ",
     city: "",
   });
 
@@ -298,12 +298,20 @@ export function RegisterPage() {
 
             <div>
               <Label htmlFor="phone" className="mb-1.5 block">{t("auth.phone")}</Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={form.phone}
-                onChange={(e) => handleField("phone", e.target.value)}
-              />
+              <div className="flex rounded-md border border-input overflow-hidden focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                <span className="flex items-center px-3 text-sm border-r border-input bg-muted select-none text-muted-foreground">
+                  +382
+                </span>
+                <input
+                  id="phone"
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="XX XXX XXX"
+                  className="flex-1 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground"
+                  value={form.phone.replace(/^\+382\s?/, "")}
+                  onChange={(e) => handleField("phone", "+382 " + e.target.value)}
+                />
+              </div>
               {fieldErrors.phone && (
                 <p className="text-xs text-destructive mt-1">{fieldErrors.phone}</p>
               )}

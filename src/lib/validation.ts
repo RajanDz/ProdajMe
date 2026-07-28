@@ -19,7 +19,11 @@ export const signUpSchema = z.object({
     .toLowerCase(),
   phone: z
     .string()
-    .regex(/^\+?[0-9\s\-().]{6,20}$/, "Nevažeći format broja telefona."),
+    .min(1, "Broj telefona je obavezan.")
+    .regex(
+      /^\+382\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{3,4}$/,
+      "Unesite ispravan crnogorski broj (npr. XX XXX XXX)."
+    ),
   city: z.string().min(2, "Grad je obavezan.").max(100, "Naziv grada je predugačak."),
 });
 
@@ -42,7 +46,11 @@ export const profileSchema = z.object({
   full_name: z.string().max(100, "Ime je predugačko.").optional().or(z.literal("")),
   phone: z
     .string()
-    .regex(/^\+?[0-9\s\-().]{6,20}$/, "Nevažeći format broja telefona."),
+    .min(1, "Broj telefona je obavezan.")
+    .regex(
+      /^\+382\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{3,4}$/,
+      "Unesite ispravan crnogorski broj (npr. XX XXX XXX)."
+    ),
   city: z.string().min(2, "Grad je obavezan.").max(100, "Naziv grada je predugačak."),
 });
 
@@ -52,7 +60,7 @@ export const onboardingSchema = profileSchema.extend({
     .min(1, "Broj telefona je obavezan.")
     .regex(
       /^\+382\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{3,4}$/,
-      "Unesite ispravan crnogorski broj (npr. 67 155 370)."
+      "Unesite ispravan crnogorski broj (npr. XX XXX XXX)."
     ),
 });
 
