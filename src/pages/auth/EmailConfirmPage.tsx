@@ -21,7 +21,7 @@ export function EmailConfirmPage() {
       await refreshProfile();
       navigate("/", { replace: true });
     })();
-  }, [user]);
+  }, [user, navigate, refreshProfile]);
 
   return (
     <div className="flex min-h-screen items-center justify-center">
