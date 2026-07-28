@@ -46,6 +46,15 @@ export const profileSchema = z.object({
   city: z.string().min(2, "Grad je obavezan.").max(100, "Naziv grada je predugačak."),
 });
 
+// Same as profileSchema but phone is optional — used for Google OAuth onboarding
+export const onboardingSchema = profileSchema.extend({
+  phone: z
+    .string()
+    .regex(/^\+?[0-9\s\-().]{6,20}$/, "Nevažeći format broja telefona.")
+    .optional()
+    .or(z.literal("")),
+});
+
 export const listingSchema = z.object({
   title: z
     .string()
@@ -152,4 +161,5 @@ export type SignUpInput = z.infer<typeof signUpSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
+export type OnboardingInput = z.infer<typeof onboardingSchema>;
 export type ListingInput = z.infer<typeof listingSchema>;
