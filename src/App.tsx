@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/common/ProtectedRoute";
+import { PostLoginGuard } from "./components/common/PostLoginGuard";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 
 import { HomePage } from "./pages/HomePage";
@@ -18,6 +19,7 @@ import { RegisterPage } from "./pages/auth/RegisterPage";
 import { ForgotPasswordPage } from "./pages/auth/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/auth/ResetPasswordPage";
 import { AuthCallbackPage } from "./pages/auth/AuthCallbackPage";
+import { EmailConfirmPage } from "./pages/auth/EmailConfirmPage";
 import { OnboardingPage } from "./pages/auth/OnboardingPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
@@ -55,6 +57,7 @@ function AppRoutes() {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
+      <Route path="/auth/confirm-email" element={<EmailConfirmPage />} />
       <Route path="/onboarding" element={
         <ProtectedRoute>
           <OnboardingPage />
@@ -75,7 +78,9 @@ function App() {
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           </div>
         }>
-          <AppRoutes />
+          <PostLoginGuard>
+            <AppRoutes />
+          </PostLoginGuard>
         </Suspense>
       </AuthProvider>
     </BrowserRouter>
