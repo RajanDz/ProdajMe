@@ -47,13 +47,6 @@ export function OnboardingPage() {
     }
   }, [profile]);
 
-  // Skip onboarding for users who already have both required fields
-  useEffect(() => {
-    if (profile && profile.username && profile.city) {
-      navigate("/", { replace: true });
-    }
-  }, [profile, navigate]);
-
   const handleField = <K extends keyof OnboardingInput>(key: K, value: OnboardingInput[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
     setFieldErrors((e) => ({ ...e, [key]: undefined }));
@@ -100,6 +93,7 @@ export function OnboardingPage() {
         full_name: result.data.full_name || null,
         phone: result.data.phone || null,
         city: result.data.city,
+        onboarding_completed: true,
       })
       .eq("id", user.id);
 

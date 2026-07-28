@@ -8,6 +8,7 @@ interface AuthContextValue {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
+  profileLoading: boolean;
   refreshProfile: () => Promise<void>;
 }
 
@@ -18,29 +19,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   const fetchProfile = async (userId: string) => {
-    // Retry up to 3 times with a short delay.
-    // Covers the rare window where the DB trigger hasn't committed yet
-    // by the time the client receives the session.
-    for (let attempt = 0; attempt < 3; attempt++) {
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
-
-      if (data) {
-        setProfile(data);
-        return;
-      }
-
-      if (attempt < 2) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-      }
-    }
-
+    // Clear stale profile immediately so consumers never read the previous
+    // session's data while the new fetch is in flight.
     setProfile(null);
+    setProfileLoading(true);
+
+    try {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const { data } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", userId)
+          .single();
+
+        if (data) {
+          setProfile(data);
+          return;
+        }
+
+        if (attempt < 2) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+      }
+
+      setProfile(null);
+    } finally {
+      setProfileLoading(false);
+    }
   };
 
   const refreshProfile = async () => {
@@ -74,7 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, user, profile, loading, refreshProfile }}>
+    <AuthContext.Provider value={{ session, user, profile, loading, profileLoading, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

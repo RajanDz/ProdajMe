@@ -20,6 +20,7 @@ export interface Profile {
   phone: string | null;
   role: UserRole;
   is_suspended: boolean;
+  onboarding_completed: boolean;
   created_at: string;
   updated_at: string;
 }
