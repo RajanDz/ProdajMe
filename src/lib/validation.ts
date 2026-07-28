@@ -46,13 +46,14 @@ export const profileSchema = z.object({
   city: z.string().min(2, "Grad je obavezan.").max(100, "Naziv grada je predugačak."),
 });
 
-// Same as profileSchema but phone is optional — used for Google OAuth onboarding
 export const onboardingSchema = profileSchema.extend({
   phone: z
     .string()
-    .regex(/^\+?[0-9\s\-().]{6,20}$/, "Nevažeći format broja telefona.")
-    .optional()
-    .or(z.literal("")),
+    .min(1, "Broj telefona je obavezan.")
+    .regex(
+      /^\+382\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{3,4}$/,
+      "Unesite ispravan crnogorski broj (npr. 67 155 370)."
+    ),
 });
 
 export const listingSchema = z.object({

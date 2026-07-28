@@ -27,7 +27,7 @@ export function OnboardingPage() {
   const [form, setForm] = useState<OnboardingInput>({
     username: "",
     full_name: "",
-    phone: "",
+    phone: "+382 ",
     city: "",
   });
 
@@ -41,7 +41,7 @@ export function OnboardingPage() {
       setForm({
         username: profile.username ?? "",
         full_name: profile.full_name ?? "",
-        phone: profile.phone ?? "",
+        phone: profile.phone ?? "+382 ",
         city: profile.city ?? "",
       });
     }
@@ -197,15 +197,22 @@ export function OnboardingPage() {
             {/* Phone */}
             <div>
               <Label htmlFor="phone" className="mb-1.5 block">
-                {t("auth.phone")}{" "}
-                <span className="text-muted-foreground font-normal">({t("common.optional")})</span>
+                {t("auth.phone")}
               </Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={form.phone ?? ""}
-                onChange={(e) => handleField("phone", e.target.value)}
-              />
+              <div className="flex rounded-md border border-input overflow-hidden focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                <span className="flex items-center px-3 text-sm border-r border-input bg-muted select-none text-muted-foreground">
+                  +382
+                </span>
+                <input
+                  id="phone"
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="67 155 370"
+                  className="flex-1 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground"
+                  value={form.phone.replace(/^\+382\s?/, "")}
+                  onChange={(e) => handleField("phone", "+382 " + e.target.value)}
+                />
+              </div>
               {fieldErrors.phone && (
                 <p className="text-xs text-destructive mt-1">{fieldErrors.phone}</p>
               )}
